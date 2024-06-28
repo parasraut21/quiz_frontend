@@ -21,7 +21,7 @@ const QuizPage = () => {
   useEffect(() => {
     const fetchQuiz = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/quizzes/${quizId}`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/quizzes/${quizId}`);
         if (!response.ok) {
           throw new Error('Failed to fetch quiz');
         }
@@ -125,7 +125,7 @@ const QuizPage = () => {
     setShowSummary(true);
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/quizzes/score`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/quizzes/score`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

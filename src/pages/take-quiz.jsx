@@ -12,7 +12,7 @@ const TakeQuizPage = () => {
   useEffect(() => {
     const fetchQuizzes = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/quizzes`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/quizzes`);
         if (!response.ok) throw new Error('Failed to fetch quizzes');
         const data = await response.json();
         setQuizzes(data);

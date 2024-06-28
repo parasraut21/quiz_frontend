@@ -11,7 +11,7 @@ const LeaderboardPage = () => {
     const fetchLeaderboard = async () => {
       if (!quizId) return;
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/quizzes/${quizId}/leaderboard`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/quizzes/${quizId}/leaderboard`);
         if (!response.ok) {
           throw new Error('Failed to fetch leaderboard');
         }
