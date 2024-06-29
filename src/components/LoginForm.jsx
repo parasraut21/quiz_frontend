@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useAuth } from '@/contexts/authContext';
+import QuizLoader from './QuizLoader';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
@@ -44,6 +45,7 @@ const LoginForm = () => {
   return (
     <>
       <ToastContainer />
+      {isLoading && <QuizLoader />} 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="relative">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">

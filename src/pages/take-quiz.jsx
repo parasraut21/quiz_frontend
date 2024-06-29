@@ -1,8 +1,8 @@
-
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { motion } from 'framer-motion';
+import QuizLoader from '@/components/QuizLoader';
 
 const TakeQuizPage = () => {
   const [quizzes, setQuizzes] = useState([]);
@@ -62,7 +62,7 @@ const TakeQuizPage = () => {
         </h1>
 
         {isLoading ? (
-          <div className="text-2xl text-center">Loading quizzes...</div>
+          <QuizLoader /> // Use the QuizLoader component here
         ) : (
           <>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">

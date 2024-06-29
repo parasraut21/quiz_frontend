@@ -2,9 +2,11 @@ import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import { useAuth } from '@/contexts/authContext';
 import { motion, AnimatePresence } from 'framer-motion';
+import QuizLoader from '@/components/QuizLoader';
 
 const QuizPage = () => {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(true); 
   const { quizId } = router.query;
   const [quiz, setQuiz] = useState(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -20,6 +22,7 @@ const QuizPage = () => {
 
   useEffect(() => {
     const fetchQuiz = async () => {
+      setIsLoading(true); // Set loading to true when fetching starts
       try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/quizzes/${quizId}`);
         if (!response.ok) {
@@ -30,6 +33,8 @@ const QuizPage = () => {
         setUserAnswers(new Array(data.questions.length).fill(null));
       } catch (error) {
         console.error('Error fetching quiz:', error);
+      } finally {
+        setIsLoading(false); // Set loading to false when fetching ends
       }
     };
 
@@ -207,6 +212,11 @@ const QuizPage = () => {
       transition={{ duration: 0.5 }}
       className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-br from-gray-900 to-blue-900 text-white"
     >
+ {isLoading ? ( // Add this condition
+        <QuizLoader /> // Show QuizLoader when loading
+      ) : (
+        <>
+      
       {!quizStarted && (
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -383,9 +393,35 @@ const QuizPage = () => {
     className="w-full max-w-3xl mt-8 bg-gray-800 p-8 rounded-2xl shadow-2xl"
   >
     <h2 className="text-3xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">Quiz Summary</h2>
-    <div className="flex justify-between items-center mb-8 bg-gray-700 p-4 rounded-lg">
-      <p className="text-2xl text-gray-300">Your score: <span className="font-bold text-yellow-400">{score}</span></p>
-    
+    <div className="flex flex-col items-center mb-8 bg-gray-700 p-6 rounded-lg">
+      <p className="text-2xl text-gray-300 mb-2">
+        Your score: <span className="font-bold text-yellow-400">{score}</span> / {quiz.questions.length * 10}
+      </p>
+      {(() => {
+        const percentage = (score / (quiz.questions.length * 10)) * 100;
+        let performance;
+        let performanceColor;
+
+        if (percentage >= 90) {
+          performance = "Excellent";
+          performanceColor = "text-green-400";
+        } else if (percentage >= 70) {
+          performance = "Pro";
+          performanceColor = "text-blue-400";
+        } else if (percentage >= 50) {
+          performance = "Average";
+          performanceColor = "text-yellow-400";
+        } else {
+          performance = "Novice";
+          performanceColor = "text-red-400";
+        }
+
+        return (
+          <p className={`text-xl font-bold ${performanceColor}`}>
+            Performance: {performance}
+          </p>
+        );
+      })()}
     </div>
     {answerSummary.map((summaryItem, index) => (
       <motion.div
@@ -421,6 +457,9 @@ const QuizPage = () => {
   </motion.div>
 )}
 
+
+ </>
+      )}
     </motion.div>
   );
 };
